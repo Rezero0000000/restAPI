@@ -8,32 +8,32 @@ const prisma = new PrismaClient({
         level: 'query',
       },
       {
-        emit: 'stdout',
+        emit: 'event',
         level: 'error',
       },
       {
-        emit: 'stdout',
+        emit: 'event',
         level: 'info',
       },
       {
-        emit: 'stdout',
+        emit: 'event',
         level: 'warn',
       },
     ],
   });
 
   prisma.$on("query", (e) => {
-    loger.info(e)
+    logger.info(e)
   });
 
   prisma.$on("error", (e) => {
-    loger.error(e)
+    logger.error(e)
   });
 
   prisma.$on("info", (e) => {
-    loger.info(e)
+    logger.info(e)
   });
 
   prisma.$on("warn", (e) => {
-    loger.warn(e)
+    logger.warn(e)
   });
