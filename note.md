@@ -78,3 +78,76 @@ model Contact {
 <br>
 
 ### Setup project
+
+#### Prisma & Prisma log
+
+```
+  import { PrismaClient } from "@prisma/client";
+  import {logger} from "./logging";
+
+  export const prisma = new PrismaClient({
+      log: [
+        {
+          emit: 'event',
+          level: 'query',
+        },
+        {
+          emit: 'event',
+          level: 'error',
+        },
+        {
+          emit: 'event',
+          level: 'info',
+        },
+        {
+          emit: 'event',
+          level: 'warn',
+        },
+      ],
+    });
+
+    prisma.$on("query", (e) => {
+      logger.info(e)
+    });
+
+    prisma.$on("error", (e) => {
+      logger.error(e)
+    });
+
+    prisma.$on("info", (e) => {
+      logger.info(e)
+    });
+
+    prisma.$on("warn", (e) => {
+      logger.warn(e)
+    });
+
+  ```
+
+### Winston
+```
+  import winston from "winston";
+
+  export const logger = winston.createLogger({
+      level: "debug",
+      format: winston.format.json(),
+      transports: [
+          new winston.transports.Console({})
+      ]
+  })
+
+```
+
+### Express
+
+```
+
+import express from "express"
+
+export const web = express();
+web.use(express.json());
+
+```
+
+
+### Register user API
