@@ -1,7 +1,7 @@
 import { ZodType } from "zod";
 
 export class Validation {
-    static validation <T> (scheme: ZodType, data: T): ZodType<T> {
+    static validate <T> (scheme: ZodType, data: T): T {
         return scheme.parse(data);
     }
 }

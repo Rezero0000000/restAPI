@@ -151,3 +151,21 @@ web.use(express.json());
 
 
 ### Register user API
+
+- Making type for response and request on user-model.ts
+- create UserService class then create the register method (don't forget to use the user models type and asyncrhonous)
+- ### then we're gonna Setup the validation :v
+- okay here's how to create a validation scheme 
+```
+
+import { z, ZodType } from "zod";
+
+export class UserValidation {
+    static readonly REGISTER: ZodType = z.object({
+        name: z.string().min(1).max(100),
+        username: z.string().min(1).max(100),
+        password: z.string().min(1).max(100),
+    })
+}
+
+```
