@@ -245,3 +245,43 @@ export function toUserResponse (user: User) :UserResponse {
 }
 
 ```
+
+- Create Router for public api and user
+```
+
+[public-api.ts]
+
+import express from "express";
+import { UserController } from "../controller/user-controller";
+
+
+export const publicRouter = express.Router();
+publicRouter.post("api/users", UserController.register);
+
+
+```
+
+- create controller 
+
+```
+
+import { NextFunction, Request, Response } from "express";
+import { CreateUserRequest } from "../model/user-model";
+import { UserService } from "../service/user-service";
+
+export class UserController {
+    static async register (req: Request, res: Response, next: NextFunction) {
+        try {
+            const request :CreateUserRequest = req.body as CreateUserRequest;
+            const response = UserService.register(request);
+            res.status(200).json({
+                data: response
+            }) 
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+}
+
+```
