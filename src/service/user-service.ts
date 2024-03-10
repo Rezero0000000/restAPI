@@ -7,7 +7,6 @@ import bcrypt from "bcrypt"
 
 export class UserService {
     static async register (request: CreateUserRequest) :Promise<UserResponse> {
-
         // validation
         const registerRequest = Validation.validate(UserValidation.REGISTER,  request);
 
@@ -28,7 +27,7 @@ export class UserService {
         const user = await Prisma.user.create({
             data: registerRequest
         });
-
+        console.log(user, "HHH")
         // return UserResponse
         return toUserResponse(user);
     }
