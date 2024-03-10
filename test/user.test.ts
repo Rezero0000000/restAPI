@@ -32,7 +32,7 @@ describe ("Testing User API", function () :void {
             password: "rei"
         });
 
-        // logger.debug(response.body);
+        logger.debug(response.body);
         console.log(response.body, response.status)
         expect(response.status).toBe(200);
         expect(response.body.data.name).toBe("rei");
