@@ -7,7 +7,7 @@ export class UserValidation {
         password: z.string().min(1).max(100),
     })
     
-    static readonly Login :ZodType = z.object({
+    static readonly LOGIN :ZodType = z.object({
         name: z.string().min(1).max(100),
         username: z.string().min(1).max(100),
     })

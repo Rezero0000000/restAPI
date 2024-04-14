@@ -12,8 +12,8 @@ export type CreateUserRequest = {
 }
 
 export type LoginUserRequest = {
-    name: string,
     username: string
+    password: string
 }
 
 export function toUserResponse (user: User) :UserResponse {
