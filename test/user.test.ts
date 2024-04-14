@@ -3,7 +3,7 @@ import {web} from "../src/application/web"
 import { logger } from "../src/application/logging";
 import { UserTest } from "./test-util";
 
-describe ("Testing User API", function () :void {
+describe ("Testing Register", function () :void {
     afterEach (async () => {
         await UserTest.delete();
     });
@@ -52,3 +52,26 @@ describe ("Testing User API", function () :void {
     })
 })
 
+describe ("Testing Login", function() :void {
+
+    beforeEach (async () => {
+        await UserTest.create()
+    })
+
+    // afterEach (async () => {
+    //     await UserTest.delete()
+    // })
+
+    it ("Should be sucess login", async () => {
+        const response = await supertest(web)
+        .post("/api/users/login")
+        .send({
+            username: "rei",
+            password: "rei"
+        });
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+    })
+
+})

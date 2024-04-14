@@ -1,4 +1,5 @@
 import { Prisma } from "../src/application/database";
+import bcrypt from "bcrypt"
 
 export class UserTest {
     static async delete () {
@@ -7,5 +8,16 @@ export class UserTest {
                 username: "rei"
             }
         })
+    }
+
+    static async create () {
+        await Prisma.user.create({
+            data: {
+                name: "rei",
+                username: "rei",
+                password: await bcrypt.hash("rei", 10),
+                token: "rei"
+            }
+        });
     }
 };
