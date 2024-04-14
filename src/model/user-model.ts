@@ -11,6 +11,11 @@ export type CreateUserRequest = {
     password :string   
 }
 
+export type LoginUserRequest = {
+    name: string,
+    username: string
+}
+
 export function toUserResponse (user: User) :UserResponse {
     return {
         name: user.name,

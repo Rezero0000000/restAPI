@@ -1,4 +1,4 @@
-import { CreateUserRequest, UserResponse, toUserResponse } from "../model/user-model";
+import { CreateUserRequest, LoginUserRequest, UserResponse, toUserResponse } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { ResponseError } from "../error/response-error";
 import { Validation } from "../validation/validation";
@@ -31,4 +31,8 @@ export class UserService {
         // return UserResponse
         return toUserResponse(user);
     }
+
+    // static async login (req: LoginUserRequest) :Promise<UserResponse> {
+ 
+    // }
 }

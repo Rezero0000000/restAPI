@@ -17,7 +17,7 @@ describe ("Testing User API", function () :void {
             password: ""
         });
 
-        console.log(response.body.errors)
+        // console.log(response.body.errors)
         logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
