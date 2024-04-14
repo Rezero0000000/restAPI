@@ -17,7 +17,20 @@ describe ("Testing User API", function () :void {
             password: ""
         });
 
-        // console.log(response.body.errors)
+        logger.debug(response.body);
+        expect(response.status).toBe(400);
+        expect(response.body.errors).toBeDefined();
+    })
+
+    it ("Should be duplicate data error", async () => {
+        const response =  await supertest(web)
+        .post("/api/users")
+        .send({
+            name: "rezero",
+            username: "rezero",
+            password: "rezero"
+        });
+
         logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
@@ -33,7 +46,6 @@ describe ("Testing User API", function () :void {
         });
 
         logger.debug(response.body);
-        console.log(response.body, response.status)
         expect(response.status).toBe(200);
         expect(response.body.data.name).toBe("rei");
         expect(response.body.data.username).toBe("rei");
