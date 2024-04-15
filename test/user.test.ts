@@ -3,7 +3,7 @@ import {web} from "../src/application/web"
 import { logger } from "../src/application/logging";
 import { UserTest } from "./test-util";
 
-describe ("Testing Register", function () :void {
+describe ("POST /api/users", function () :void {
     afterEach (async () => {
         await UserTest.delete();
     });
@@ -49,19 +49,18 @@ describe ("Testing Register", function () :void {
         expect(response.status).toBe(200);
         expect(response.body.data.name).toBe("rei");
         expect(response.body.data.username).toBe("rei");
-    })
+    });
 })
 
-describe ("Testing Login", function() :void {
+describe ("POST /api/users/login", function() :void {
 
     beforeEach (async () => {
         await UserTest.create()
     })
-
-    // afterEach (async () => {
-    //     await UserTest.delete()
-    // })
-
+    afterEach (async () => {
+        await UserTest.delete();
+    });
+ 
     it ("Should be sucess login", async () => {
         const response = await supertest(web)
         .post("/api/users/login")
@@ -72,6 +71,36 @@ describe ("Testing Login", function() :void {
 
         logger.debug(response.body);
         expect(response.status).toBe(200);
-    })
+        expect(response.body.data.name).toBe("rei");
+        expect(response.body.data.username).toBe("rei");
+        expect(response.body.data.token).toBeDefined();
+    });
+
+    it ("Should be reject login user if password is wrong", async () => {
+        const response = await supertest(web)
+        .post("/api/users/login")
+        .send({
+            username: "rei",
+            password: "salah"
+        });
+
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
+    });
+
+    
+    it ("Should be reject login user if username is wrong", async () => {
+        const response = await supertest(web)
+        .post("/api/users/login")
+        .send({
+            username: "salah",
+            password: "rei"
+        });
+
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
+    });
 
 })

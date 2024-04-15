@@ -47,8 +47,6 @@ export class UserService {
             throw new ResponseError (401, "User not found");
         }
 
-        console.log(LoginUserRequest.password, user.password);
-        console.log(await bcrypt.compare(LoginUserRequest.password, user.password))
         const isPasswordValid = await bcrypt.compare(LoginUserRequest.password, user.password);
         if (!isPasswordValid) {
             throw new ResponseError (401, "Wrong password");
