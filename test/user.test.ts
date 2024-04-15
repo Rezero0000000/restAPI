@@ -50,7 +50,9 @@ describe ("POST /api/users", function () :void {
         expect(response.body.data.name).toBe("rei");
         expect(response.body.data.username).toBe("rei");
     });
-})
+});
+
+
 
 describe ("POST /api/users/login", function() :void {
 
@@ -103,4 +105,37 @@ describe ("POST /api/users/login", function() :void {
         expect(response.body.errors).toBeDefined();
     });
 
-})
+});
+
+
+
+describe ("GET /api/users/current", function() :void {    
+    beforeEach (async () => {
+        await UserTest.create()
+    })
+    afterEach (async () => {
+        await UserTest.delete();
+    });
+
+    it ("Should be success get current user", async () => {
+        const response = await supertest(web)
+        .get("/api/users/current")
+        .set("X-API-TOKEN", "rei")
+        
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        console.log(response.body.data)
+        expect(response.body.data.name).toBe("rei");
+        expect(response.body.data.username).toBe("rei");
+    })
+
+    it ("Should be fail to get current user", async () => {
+        const response = await supertest(web)
+        .get("/api/users/current")
+        .set("X_API-TOKEN", "salah")
+
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+    })
+});

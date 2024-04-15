@@ -3,6 +3,7 @@ import { UserValidation } from "../validation/user-validation";
 import { ResponseError } from "../error/response-error";
 import { Validation } from "../validation/validation";
 import { Prisma } from "../application/database";
+import { User } from "@prisma/client";
 import {v4 as uuid} from "uuid";
 import bcrypt from "bcrypt"
 
@@ -65,5 +66,9 @@ export class UserService {
         const response = toUserResponse(user);
         response.token = user.token!;
         return response;
+    }
+
+    static async get (user :User) :Promise<UserResponse> {
+        return toUserResponse(user);
     }
 }
