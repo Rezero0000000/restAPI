@@ -161,4 +161,17 @@ describe ("PATCH /api/users/current/", function() :void {
         expect(response.status).toBe(200);
         expect(response.body.data.name).toBe("LOL")
     });
+
+    it ("Should be reject to update user ", async () => {
+        const response = await supertest(web)
+        .patch("/api/users/current")
+        .set("X-API-TOKEN", "salah")
+        .send({ 
+            name: "LOL"
+        })
+
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
+    });
 })
