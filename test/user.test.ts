@@ -134,7 +134,7 @@ describe ("GET /api/users/current", function() :void {
     it ("Should be fail to get current user", async () => {
         const response = await supertest(web)
         .get("/api/users/current")
-        .set("X_API-TOKEN", "salah")
+        .set("X-API-TOKEN", "salah")
 
         logger.debug(response.body);
         expect(response.status).toBe(401);
@@ -153,7 +153,7 @@ describe ("PATCH /api/users/current/", function() :void {
         const response = await supertest(web)
         .patch("/api/users/current")
         .set("X-API-TOKEN", "rei")
-        .send({
+        .send({ 
             name: "LOL"
         })
 
