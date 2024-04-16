@@ -110,6 +110,7 @@ describe ("POST /api/users/login", function() :void {
 
 
 describe ("GET /api/users/current", function() :void {    
+
     beforeEach (async () => {
         await UserTest.create()
     })
@@ -139,3 +140,25 @@ describe ("GET /api/users/current", function() :void {
         expect(response.status).toBe(401);
     })
 });
+
+describe ("PATCH /api/users/current/", function() :void {
+    beforeEach (async () => {
+        await UserTest.create()
+    })
+    afterEach (async () => {
+        await UserTest.delete();
+    });
+
+    it ("Should be able to update user name", async () => {
+        const response = await supertest(web)
+        .patch("/api/users/current")
+        .set("X-API-TOKEN", "rei")
+        .send({
+            name: "LOL"
+        })
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body.data.name).toBe("LOL")
+    });
+})
