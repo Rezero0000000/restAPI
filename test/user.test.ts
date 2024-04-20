@@ -141,6 +141,8 @@ describe ("GET /api/users/current", function() :void {
     })
 });
 
+
+
 describe ("PATCH /api/users/current/", function() :void {
     beforeEach (async () => {
         await UserTest.create()
@@ -162,16 +164,62 @@ describe ("PATCH /api/users/current/", function() :void {
         expect(response.body.data.name).toBe("LOL")
     });
 
-    it ("Should be reject to update user ", async () => {
+    it ("Should be reject to update user if token wrong ", async () => {
         const response = await supertest(web)
         .patch("/api/users/current")
         .set("X-API-TOKEN", "salah")
         .send({ 
-            name: "LOL"
+            name: "LOL",
+            password: "LOL"
         })
 
         logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });
+
+    it ("Should be succes to update user name ", async () => {
+        const response = await supertest(web)
+        .patch("/api/users/current")
+        .set("X-API-TOKEN", "rei")
+        .send({ 
+            name: "LOL",
+        })
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body.data.name).toBe("LOL");
+    });
+
+    it ("Should be succes to update user password ", async () => {
+        const response = await supertest(web)
+        .patch("/api/users/current")
+        .set("X-API-TOKEN", "rei")
+        .send({ 
+            password: "LOL",
+        });
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        // expect(response.body.data.password).toBeDefined();
+    });
 })
+
+
+describe ("DELETE /api/users/current/logout", function() :void {
+    beforeEach (async () => {
+        await UserTest.create()
+    })
+    afterEach (async () => {
+        await UserTest.delete();
+    });
+
+    it ("Should be success logout", async () => {
+        const response = await supertest(web)
+        .delete("/api/users/current/logout")
+        .set("X-API-TOKEN", "rei");
+
+        logger.debug(response.body)
+        expect(response.status).toBe(200);
+    });
+});

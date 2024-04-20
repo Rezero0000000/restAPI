@@ -1,4 +1,5 @@
 import { Prisma } from "../src/application/database";
+import { User } from "@prisma/client";
 import bcrypt from "bcrypt"
 
 export class UserTest {
@@ -20,4 +21,8 @@ export class UserTest {
             }
         });
     }
+
+    // static async getCurrentUser () {
+
+    // }
 };

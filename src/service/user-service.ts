@@ -3,6 +3,7 @@ import { UserValidation } from "../validation/user-validation";
 import { ResponseError } from "../error/response-error";
 import { Validation } from "../validation/validation";
 import { Prisma } from "../application/database";
+import { logger } from "../application/logging";
 import { User } from "@prisma/client";
 import {v4 as uuid} from "uuid";
 import bcrypt from "bcrypt"
@@ -33,6 +34,7 @@ export class UserService {
 
         return toUserResponse(user);
     }
+
 
     static async login (request: LoginUserRequest) :Promise<UserResponse> {
         const LoginUserRequest = Validation.validate(UserValidation.LOGIN,  request);
@@ -68,9 +70,11 @@ export class UserService {
         return response;
     }
 
+
     static async get (user :User) :Promise<UserResponse> {
         return toUserResponse(user);
     }
+
 
     static async update (user :User, request: UpdateUserRequest) :Promise<UserResponse> {
         const UpdateUserRequest = Validation.validate(UserValidation.UPDATE, request);
@@ -82,7 +86,7 @@ export class UserService {
         if (UpdateUserRequest.password) {
             user.password = await bcrypt.hash(UpdateUserRequest.password, 10);
         }
-
+        
         const result = await Prisma.user.update({
             where: {
                 username: user.username
@@ -91,5 +95,19 @@ export class UserService {
         });
 
         return toUserResponse(result)
+    }
+
+
+    static async  logout (user: User) :Promise<UserResponse> {
+    
+        user.token = null;
+        const result = await Prisma.user.update({
+            where: {
+                username: user.username
+            },
+            data: user
+        });
+
+        return toUserResponse(result);
     }
 }
