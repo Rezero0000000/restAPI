@@ -13,4 +13,4 @@ apiRouter.delete("/api/users/current/logout", UserController.logout);
 
 // contact
 apiRouter.post("/api/contacts", ContactController.create);
-apiRouter.post("/api/contacts", ContactController.create);
+apiRouter.get("/api/contacts/:contactId(\\d+)", ContactController.get);

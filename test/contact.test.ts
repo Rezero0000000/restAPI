@@ -50,3 +50,26 @@ describe('POST /api/contacts', () => {
         expect(response.body.errors).toBeDefined();
     });
 });
+
+describe ("GET /api/contacts/:contactId", function()  :void {
+    beforeEach(async () => {
+        await UserTest.create();
+        await ContactTest.create();
+    });
+
+    afterEach(async () => {
+        await ContactTest.deleteAll();
+        await UserTest.delete();
+    });
+
+    it ("Should be success get contact", async () => {
+
+        const contact = await ContactTest.get();
+        const response = await supertest(web)
+        .get(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "rei")
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+    })
+})
