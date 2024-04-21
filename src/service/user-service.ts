@@ -100,12 +100,13 @@ export class UserService {
 
     static async  logout (user: User) :Promise<UserResponse> {
     
-        user.token = null;
         const result = await Prisma.user.update({
             where: {
                 username: user.username
             },
-            data: user
+            data: {
+                token: null
+            }
         });
 
         return toUserResponse(result);

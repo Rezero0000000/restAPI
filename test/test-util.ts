@@ -22,7 +22,16 @@ export class UserTest {
         });
     }
 
-    // static async getCurrentUser () {
+    static async get ():    Promise<User> {
+        const user = await Prisma.user.findFirst({
+            where: {
+                username: "rei"
+            }
+        })
 
-    // }
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user
+    }
 };

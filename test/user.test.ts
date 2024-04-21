@@ -1,7 +1,8 @@
-import supertest from "supertest"
-import {web} from "../src/application/web"
 import { logger } from "../src/application/logging";
+import {web} from "../src/application/web"
 import { UserTest } from "./test-util";
+import supertest from "supertest"
+import bcrypt from "bcrypt"
 
 describe ("POST /api/users", function () :void {
     afterEach (async () => {
@@ -201,7 +202,10 @@ describe ("PATCH /api/users/current/", function() :void {
 
         logger.debug(response.body);
         expect(response.status).toBe(200);
-        // expect(response.body.data.password).toBeDefined();
+
+        const user = await UserTest.get();
+        expect(await bcrypt.compare("LOL", user.password)).toBe(true);
+
     });
 })
 
@@ -221,5 +225,9 @@ describe ("DELETE /api/users/current/logout", function() :void {
 
         logger.debug(response.body)
         expect(response.status).toBe(200);
+        expect(response.body.data).toBeDefined();
+
+        const user = await UserTest.get();
+        expect(user.token).toBeNull();
     });
 });
