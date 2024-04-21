@@ -15,6 +15,14 @@ export type ContactResponse = {
     phone?:  string | null;
 }
 
+export type updateContactRequest = {
+    id: number;
+    first_name: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+}
+
 export function toContactResponse (contact: Contact) :ContactResponse {
     return {
         id: contact.id,
@@ -24,3 +32,4 @@ export function toContactResponse (contact: Contact) :ContactResponse {
         phone: contact.phone
     }
 }
+

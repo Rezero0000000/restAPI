@@ -72,4 +72,45 @@ describe ("GET /api/contacts/:contactId", function()  :void {
         logger.debug(response.body);
         expect(response.status).toBe(200);
     })
+
+    it ("Should be failed if token invalid", async () => {
+
+        const contact = await ContactTest.get();
+        const response = await supertest(web)
+        .get(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "salah")
+
+        logger.debug(response.body);
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
+    })
+})
+
+describe ("PUT /api/contacts/:contactId", function()  :void {
+    beforeEach(async () => {
+        await UserTest.create();
+        await ContactTest.create();
+    });
+
+    afterEach(async () => {
+        await ContactTest.deleteAll();
+        await UserTest.delete();
+    });
+
+
+    it ("Should be success update contact", async () => {
+
+        const contact = await ContactTest.get();
+        const response =await supertest(web)
+        .put(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "rei")
+        .send({
+            first_name: "eko",
+            last_name: "khannedy",
+            email: "eko@example.com",
+            phone: "9999"
+        })
+
+        expect(response.status).toBe(200);
+    })
 })
