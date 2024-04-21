@@ -1,6 +1,7 @@
 import { Prisma } from "../application/database";
 import { ResponseError } from "../error/response-error";
 import { ContactResponse, CreateContactRequest, toContactResponse, updateContactRequest } from "../model/contact-model";
+import { toUserResponse } from "../model/user-model";
 import { ContactValidation } from "../validation/contact-validation";
 import { Validation } from "../validation/validation";
 import { Contact, User } from "@prisma/client";
@@ -58,5 +59,27 @@ export class ContactService {
             data: validateRequest
         })
         return toContactResponse(response);
+    }
+
+    static async remove (user: User, contactId: number): Promise<ContactResponse> {
+        const contact = await Prisma.contact.findFirst({
+            where: {
+                id: contactId,
+                username: user.username
+            }
+        }); 
+
+        if (!contact) {
+            throw new ResponseError(400, "Contact not found");
+        }
+
+        const contact2 = await Prisma.contact.delete({
+            where: {
+                id: contactId,
+                username: user.username
+            }
+        })
+
+        return toContactResponse(contact2);
     }
 }

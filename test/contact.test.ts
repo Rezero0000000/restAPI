@@ -113,4 +113,34 @@ describe ("PUT /api/contacts/:contactId", function()  :void {
 
         expect(response.status).toBe(200);
     })
-})
+});
+
+describe ("DELETE /api/contacts/:contactId", function() :void {
+    beforeEach(async () => {
+        await UserTest.create();
+        await ContactTest.create();
+    });
+
+    afterEach(async () => {
+        await ContactTest.deleteAll();
+        await UserTest.delete();
+    });
+
+    it ("Should be success to remove contact", async () => {
+        const contact = await ContactTest.get();
+        const response = await supertest(web)
+        .delete(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "rei");
+
+        expect(response.status).toBe(200);
+    });
+
+    it ("Should be rejected if token wrong", async () => {
+        const contact = await ContactTest.get();
+        const response = await supertest(web)
+        .delete(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "salah");
+
+        expect(response.status).toBe(401);
+    });
+});
