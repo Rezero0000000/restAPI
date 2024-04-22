@@ -35,7 +35,7 @@ export class ContactService {
         }); 
         
         if (!contact) {
-            throw new ResponseError(400, "Contact not found");
+            throw new ResponseError(404, "Contact not found");
         }
         return contact;
     }

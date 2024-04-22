@@ -162,6 +162,6 @@ describe ("DELETE /api/contacts/:contactId", function() :void {
         .set("X-API-TOKEN", "rei");
 
         logger.debug(response.body);
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
     });
 });

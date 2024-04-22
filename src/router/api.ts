@@ -1,3 +1,4 @@
+import { AddressController } from "../controller/address-controller";
 import { ContactController } from "../controller/contact-controller";
 import { UserController } from "../controller/user-controller";
 import { authMiddleware } from "../middleware/auth-middleware";
@@ -16,3 +17,7 @@ apiRouter.post("/api/contacts", ContactController.create);
 apiRouter.get("/api/contacts/:contactId(\\d+)", ContactController.get);
 apiRouter.put("/api/contacts/:contactId(\\d+)", ContactController.update);
 apiRouter.delete("/api/contacts/:contactId(\\d+)", ContactController.remove);
+
+
+// address
+apiRouter.post("/api/contacts/:contactId(\\d+)/addresses", AddressController.create);
