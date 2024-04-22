@@ -70,4 +70,20 @@ export class AddressService {
 
         return toAddressResponse(address);
     }
+
+    static async list (user: User , contactId: number): Promise<Array<AddressResponse>> {
+        await ContactService.checkContactMustExists(user, contactId);
+
+        const addresses = await Prisma.address.findMany({
+            where: {
+                contact_id: contactId
+            }
+        });
+
+        if (!addresses) {
+            throw new ResponseError (404, "Data not found");
+        }
+
+        return addresses.map((address) => toAddressResponse(address));
+    }
 }
