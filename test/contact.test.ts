@@ -1,7 +1,7 @@
 import {ContactTest, UserTest} from "./test-util";
-import supertest from "supertest";
-import {web} from "../src/application/web";
 import {logger} from "../src/application/logging";
+import {web} from "../src/application/web";
+import supertest from "supertest"; 
 
 describe('POST /api/contacts', () => {
     beforeEach(async () => {
@@ -13,7 +13,7 @@ describe('POST /api/contacts', () => {
         await UserTest.delete();
     });
 
-    it('should create new contact', async () => {
+    it('should able to create new contact', async () => {
         const response = await supertest(web)
             .post("/api/contacts")
             .set("X-API-TOKEN", "rei")
@@ -34,19 +34,19 @@ describe('POST /api/contacts', () => {
     });
 
     
-    it('should rejected if token wrong', async () => {
+    it('should fail if data invalid', async () => {
         const response = await supertest(web)
             .post("/api/contacts")
-            .set("X-API-TOKEN", "salah")
+            .set("X-API-TOKEN", "rei")
             .send({
                 first_name : "Rei",
                 last_name: "kun",
                 email: "rei@example.com",
-                phone: "0899999"
+                phone: "777777777777777777777777777777777777777777777777777"
             });
 
         logger.debug(response.body);
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
 });
@@ -62,7 +62,7 @@ describe ("GET /api/contacts/:contactId", function()  :void {
         await UserTest.delete();
     });
 
-    it ("Should be success get contact", async () => {
+    it ("Should be able to get contact", async () => {
 
         const contact = await ContactTest.get();
         const response = await supertest(web)
@@ -73,11 +73,11 @@ describe ("GET /api/contacts/:contactId", function()  :void {
         expect(response.status).toBe(200);
     })
 
-    it ("Should be failed if token invalid", async () => {
+    it ("Should be faile if data not found", async () => {
 
         const contact = await ContactTest.get();
         const response = await supertest(web)
-        .get(`/api/contacts/${contact.id}`)
+        .get(`/api/contacts/${contact.id + 1}`)
         .set("X-API-TOKEN", "salah")
 
         logger.debug(response.body);
@@ -98,7 +98,7 @@ describe ("PUT /api/contacts/:contactId", function()  :void {
     });
 
 
-    it ("Should be success update contact", async () => {
+    it ("Should be able to update contact", async () => {
 
         const contact = await ContactTest.get();
         const response =await supertest(web)
@@ -111,7 +111,26 @@ describe ("PUT /api/contacts/:contactId", function()  :void {
             phone: "9999"
         })
 
+        logger.debug(response.body);
         expect(response.status).toBe(200);
+    })
+
+    
+    it ("Should be fail if data invalid", async () => {
+
+        const contact = await ContactTest.get();
+        const response =await supertest(web)
+        .put(`/api/contacts/${contact.id}`)
+        .set("X-API-TOKEN", "rei")
+        .send({
+            first_name: "",
+            last_name: "",
+            email: "",
+            phone: ""
+        })
+
+        logger.debug(response.body);
+        expect(response.status).toBe(400);
     })
 });
 
@@ -132,15 +151,17 @@ describe ("DELETE /api/contacts/:contactId", function() :void {
         .delete(`/api/contacts/${contact.id}`)
         .set("X-API-TOKEN", "rei");
 
+        logger.debug(response.body);
         expect(response.status).toBe(200);
     });
 
-    it ("Should be rejected if token wrong", async () => {
+    it ("Should be reject if data not found", async () => {
         const contact = await ContactTest.get();
         const response = await supertest(web)
-        .delete(`/api/contacts/${contact.id}`)
-        .set("X-API-TOKEN", "salah");
+        .delete(`/api/contacts/${contact.id + 1}`)
+        .set("X-API-TOKEN", "rei");
 
-        expect(response.status).toBe(401);
+        logger.debug(response.body);
+        expect(response.status).toBe(400);
     });
 });

@@ -37,7 +37,7 @@ describe ("POST /api/users", function () :void {
         expect(response.body.errors).toBeDefined();
     })
 
-    it ("Should be success registation", async () => {
+    it ("Should be able to registation", async () => {
         const response =  await supertest(web)
         .post("/api/users")
         .send({
@@ -64,7 +64,7 @@ describe ("POST /api/users/login", function() :void {
         await UserTest.delete();
     });
  
-    it ("Should be sucess login", async () => {
+    it ("Should be able to login", async () => {
         const response = await supertest(web)
         .post("/api/users/login")
         .send({
@@ -79,7 +79,7 @@ describe ("POST /api/users/login", function() :void {
         expect(response.body.data.token).toBeDefined();
     });
 
-    it ("Should be reject login user if password is wrong", async () => {
+    it ("Should be reject if password is wrong", async () => {
         const response = await supertest(web)
         .post("/api/users/login")
         .send({
@@ -93,7 +93,7 @@ describe ("POST /api/users/login", function() :void {
     });
 
     
-    it ("Should be reject login user if username is wrong", async () => {
+    it ("Should be reject if username is wrong", async () => {
         const response = await supertest(web)
         .post("/api/users/login")
         .send({
@@ -119,7 +119,7 @@ describe ("GET /api/users/current", function() :void {
         await UserTest.delete();
     });
 
-    it ("Should be success get current user", async () => {
+    it ("Should be able to get current user", async () => {
         const response = await supertest(web)
         .get("/api/users/current")
         .set("X-API-TOKEN", "rei")
@@ -179,7 +179,7 @@ describe ("PATCH /api/users/current/", function() :void {
         expect(response.body.errors).toBeDefined();
     });
 
-    it ("Should be succes to update user name ", async () => {
+    it ("Should be able to update user name ", async () => {
         const response = await supertest(web)
         .patch("/api/users/current")
         .set("X-API-TOKEN", "rei")
@@ -192,7 +192,7 @@ describe ("PATCH /api/users/current/", function() :void {
         expect(response.body.data.name).toBe("LOL");
     });
 
-    it ("Should be succes to update user password ", async () => {
+    it ("Should be able to update user password ", async () => {
         const response = await supertest(web)
         .patch("/api/users/current")
         .set("X-API-TOKEN", "rei")
@@ -218,7 +218,7 @@ describe ("DELETE /api/users/current/logout", function() :void {
         await UserTest.delete();
     });
 
-    it ("Should be success logout", async () => {
+    it ("Should be able to logout", async () => {
         const response = await supertest(web)
         .delete("/api/users/current/logout")
         .set("X-API-TOKEN", "rei");
@@ -229,5 +229,15 @@ describe ("DELETE /api/users/current/logout", function() :void {
 
         const user = await UserTest.get();
         expect(user.token).toBeNull();
+    });
+
+    it ("Should be rejecte if token invalid", async () => {
+        const response = await supertest(web)
+        .delete("/api/users/current/logout")
+        .set("X-API-TOKEN", "salah");
+
+        logger.debug(response.body)
+        expect(response.status).toBe(401);
+        expect(response.body.errors).toBeDefined();
     });
 });

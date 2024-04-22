@@ -1,6 +1,6 @@
-import {Response, NextFunction } from "express";
-import { Prisma } from "../application/database";
 import { UserRequest } from "../type/user-request";
+import { Prisma } from "../application/database";
+import {Response, NextFunction } from "express";
 
 export const authMiddleware = async (req: UserRequest, res: Response, next: NextFunction) => {
 

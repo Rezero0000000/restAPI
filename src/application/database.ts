@@ -23,17 +23,17 @@ export const Prisma = new PrismaClient({
   });
 
   Prisma.$on("query", (e) => {
-    logger.info(e)
+    logger.info(e);
   });
 
   Prisma.$on("error", (e) => {
-    logger.error(e)
+    logger.error(e);
   });
 
   Prisma.$on("info", (e) => {
-    logger.info(e)
+    logger.info(e);
   });
 
   Prisma.$on("warn", (e) => {
-    logger.warn(e)
+    logger.warn(e);
   });

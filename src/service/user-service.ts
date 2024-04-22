@@ -3,7 +3,6 @@ import { UserValidation } from "../validation/user-validation";
 import { ResponseError } from "../error/response-error";
 import { Validation } from "../validation/validation";
 import { Prisma } from "../application/database";
-import { logger } from "../application/logging";
 import { User } from "@prisma/client";
 import {v4 as uuid} from "uuid";
 import bcrypt from "bcrypt"
@@ -11,22 +10,16 @@ import bcrypt from "bcrypt"
 export class UserService {
     static async register (request: CreateUserRequest) :Promise<UserResponse> {
 
-        // validation
         const registerRequest = Validation.validate(UserValidation.REGISTER,  request);
-
-
-        // Check duplicate username with prisma
         const totalUserWithSameUsername = await Prisma.user.count({
             where: {
                 username: registerRequest.username
             }
-        })
+        });
         if (totalUserWithSameUsername != 0) {
             throw new ResponseError (400, "Username already exists")
         }
 
-
-        // Hash password and create user
         registerRequest.password = await bcrypt.hash(registerRequest.password, 10);
         const user = await Prisma.user.create({
             data: registerRequest
@@ -47,12 +40,12 @@ export class UserService {
         });
 
         if (!user) {
-            throw new ResponseError (401, "User not found");
+            throw new ResponseError (401, "username or password is invalid");
         }
 
         const isPasswordValid = await bcrypt.compare(LoginUserRequest.password, user.password);
         if (!isPasswordValid) {
-            throw new ResponseError (401, "Wrong password");
+            throw new ResponseError (401, "username or password is invalid");
         }
 
         // update user login
@@ -94,7 +87,7 @@ export class UserService {
             data: user
         });
 
-        return toUserResponse(result)
+        return toUserResponse(result);
     }
 
 

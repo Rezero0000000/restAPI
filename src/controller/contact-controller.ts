@@ -14,20 +14,20 @@ export class ContactController {
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
     static async get (req: UserRequest, res: Response, next: NextFunction) {
         try {
-            const contactId = Number(req.params.contactId)
+            const contactId = Number(req.params.contactId);
             const response = await ContactService.get(req.user!, contactId);
             res.status(200).json({
                 data: response
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
@@ -35,14 +35,14 @@ export class ContactController {
     static async update (req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request :updateContactRequest = req.body as updateContactRequest;
-            request.id = Number(req.params.contactId)
+            request.id = Number(req.params.contactId);
             const response = await ContactService.update(req.user!, request);
             res.status(200).json({
                 data: response
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
@@ -55,7 +55,7 @@ export class ContactController {
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 }

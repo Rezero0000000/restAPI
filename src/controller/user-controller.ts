@@ -13,7 +13,7 @@ export class UserController {
             }) 
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
@@ -26,7 +26,7 @@ export class UserController {
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
@@ -38,7 +38,7 @@ export class UserController {
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
@@ -51,7 +51,7 @@ export class UserController {
             });
         }
         catch (e) {
-            next(e)
+            next(e);
         }
     }
 
